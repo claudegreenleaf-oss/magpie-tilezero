@@ -65,7 +65,7 @@ static const double PLAY_CHOOSER_MIN_RESOLVE_SECONDS = 0.25;
 // move-choosing solve — share this one table, so search done while
 // deciding whether to challenge seeds the search for the move itself.
 // Two choosers (one per player) stay within the 50% total cap.
-static const double PLAY_CHOOSER_ENDGAME_TT_FRACTION = 0.2;
+static const double PLAY_CHOOSER_ENDGAME_TT_FRACTION = 0.02; // tilezero: several choosers run concurrently
 
 typedef struct PlayChooserBenchmarkAtomicStats {
   _Atomic uint64_t static_moves;
