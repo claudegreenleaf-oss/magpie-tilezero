@@ -2789,7 +2789,8 @@ void peg_solve(const PegArgs *args, PegResult *out, ErrorStack *error_stack) {
   const int n_scratch = pool ? n_threads + 1 : 1;
   // Per-worker endgame TT. Shallow PEG endgames need little, and the total
   // across workers stays well under the 50%-RAM ceiling.
-  double tt_fraction = 0.25 / (double)n_scratch;
+  // tilezero: 3% total (not 25%) so several solvers fit on one machine
+  double tt_fraction = 0.03 / (double)n_scratch;
   if (tt_fraction > 0.05) {
     tt_fraction = 0.05;
   }
