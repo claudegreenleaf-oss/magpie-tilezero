@@ -106,12 +106,14 @@ transposition_table_create(double fraction_of_memory) {
              TT_MIN_SIZE_POWER,
              (1 << TT_MIN_SIZE_POWER) * TTENTRY_SIZE_BYTES / (1024 * 1024));
   }
-  int num_elems = 1 << tt->size_power_of_2;
+  // 64-bit: on machines with ~1 TB of RAM the table exceeds 2^31 entries and
+  // an int shift overflows into a negative allocation size.
+  const uint64_t num_elems = (uint64_t)1 << tt->size_power_of_2;
   size_t memory_mb = ((size_t)TTENTRY_SIZE_BYTES * num_elems) / (1024 * 1024);
   log_info("Creating transposition table. System memory: %llu, TT size: 2^%d "
-           "(elements: %d, memory: %zu MB)",
-           (unsigned long long)total_memory, tt->size_power_of_2, num_elems,
-           memory_mb);
+           "(elements: %llu, memory: %zu MB)",
+           (unsigned long long)total_memory, tt->size_power_of_2,
+           (unsigned long long)num_elems, memory_mb);
   tt->table =
       (_Atomic uint64_t *)malloc_or_die(sizeof(uint64_t) * 2 * num_elems);
   memset(tt->table, 0, sizeof(uint64_t) * 2 * num_elems);
